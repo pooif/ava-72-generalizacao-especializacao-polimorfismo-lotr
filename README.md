@@ -1,57 +1,169 @@
-# Template para projetos Java usando o Visual Studio Code
+# 7.2 // Generalização, Especialização e Polimorfismo // Lord of The Rings
 
-Um _template_ é um projeto base, para não iniciar do zero e ter pelo menos uma estrutura mínima onde se apoiar.
+Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <>
 
-Antes de começar a desenvolver com este _template_ é necessário ter instalado o Java Software Development Kit (JDK), o editor Visual Studio Code (VSCode) e o utilitário de controle de versão de código _Git_.
+Implementar respeitando os fundamentos de Orientação a Objetos.
 
+**Tópicos desta atividade:** generalização, super classes, classes abstratas, especialização, classes concretas e polimorfismo.
 
+---
 
-## Instalação e Configuração do JDK
-
-É necessário instalar o JDK a partir da versão 8, porém é recomendada versão 11-LTS (Long Term Support - suporte de longo prazo) ou até mesmo a 17-LTS.
-
-Para o Sistema Operacional (SO) Windows, ele pode ser obtido aqui <https://adoptium.net/?variant=openjdk11&jvmVariant=hotspot>. Siga as instruções de instalação e não esqueça de selecionar os opcionais durante o processo, especialmente a parte ⚠️ _"add Java to PATH"_.
-
-Para Sistemas Operacionais Linux/Debian, como Ubuntu, Pop OS, Mint, Elementary, etc, execute no terminal o comando `sudo apt install openjdk-11-jdk`, que a mágica vai acontecer.
-
-Para testar a instalação, seja no Windows ou Linux, abra o _Prompt_ de Comando (cmd) ou o Terminal e execute o compilador Java com `javac -version`. A saída deve ser algo com `javac 11.0.9.1`, ou outra versão.
+Fellowship of The Ring. Implementar a _Sociedade do Anel_, usando relacionamentos, herança, sobrecarga, comandos, consultas, etc, conforme os casos de teste a seguir.
 
 
+```java
+// Initializing People
+Person Gandalf  = new Wizard("Gandalf");
+Person Aragorn  = new Human("Aragorn");
+Person Gimli    = new Dwarf("Gimli");
+Person Legolas  = new Elf("Legolas");
+Person Boromir  = new Human("Boromir");
+Person Frodo    = new Hobbit("Frodo");
+Person Sam      = new Hobbit("Sam");
+Person Meriadoc = new Hobbit("Meriadoc");
+Person Peregrin = new Hobbit("Peregrin");
 
-## Instalação e Configuração do Visual Studio Code (VSCode)
+// Initializing Fellowships
+Fellowship FellowshipOfTheRing = new Fellowship("of The Ring");
+Fellowship EvilFellowship      = new Fellowship("of Evil");
 
-O VSCode pode ser obtido aqui: <https://code.visualstudio.com/download>. A instalação é semelhante nos Sistemas Operacionais Windows e Linux.
+// Every person has a name
+System.out.println(Gandalf.name().equals("Gandalf"));
+System.out.println(Gandalf.toString().equals("Gandalf"));
 
-No Windows, abra o instalador e não esqueça de selecionar todos os opcionais, como _adicionar code ao path_ e _adicionar "abrir com code" ao menu_, por exemplo.
+// There is no members yet
+System.out.println(FellowshipOfTheRing.toString().equals("Fellowship of The Ring"));
+System.out.println(EvilFellowship.toString().equals("Fellowship of Evil"));
+System.out.println(EvilFellowship.count() == 0);
+System.out.println(FellowshipOfTheRing.count() == 0);
+System.out.println(FellowshipOfTheRing.hasNoMembers() == true);
+System.out.println(FellowshipOfTheRing.hasMembers() == false);
 
-No Linux, abra o arquivo `.deb` baixado no gerenciador de pacotes e instale normalmente conforme instruções de seu sistema operacional.
+// Members count from 1 (not 0)
+System.out.println(FellowshipOfTheRing.member(1) == null);
+System.out.println(FellowshipOfTheRing.lastMember() == null);
 
-Este _template_ possui uma pasta [.vscode](.vscode) com as extensões necessárias em [extensions.json](.vscode/extensions.json) e as configurações recomendadas em [settings.json](.vscode/settings.json) para um **ambiente de ensino** (configuração didática). Fique a vontade para alterá-los como achar melhor.
+// There is two members (order matters)
+FellowshipOfTheRing.signUp(Gandalf); // member 1
+FellowshipOfTheRing.signUp(Aragorn); // member 2
+System.out.println(FellowshipOfTheRing.count() == 2);
+System.out.println(FellowshipOfTheRing.hasNoMembers() == false);
+System.out.println(FellowshipOfTheRing.hasMembers() == true);
 
-A única extensão obrigatória é a _"vscjava.vscode-java-pack"_.
+// Member is a intermediary class between Fellowship and Person
+System.out.println(FellowshipOfTheRing.member(1) instanceof Member);
+System.out.println(FellowshipOfTheRing.member(2) instanceof Member);
 
-A extensão _"EditorConfig"_ é bastante recomendada. Ela funciona junto com o arquivo [.editorconfig](.editorconfig) presente neste _template_ para padronizar a formatação dos códigos-fonte.
+// Through Member we can access the people
+System.out.println(FellowshipOfTheRing.member(1).person().name().equals("Gandalf"));
+System.out.println(FellowshipOfTheRing.member(1).person().equals(Gandalf));
+System.out.println(FellowshipOfTheRing.member(1).person().equals(new Wizard("Gandalf")));
+System.out.println(!FellowshipOfTheRing.member(1).person().equals(Aragorn));
+System.out.println(FellowshipOfTheRing.member(2).person().equals(Aragorn));
 
-Finalmente, se preferes o editor em Português, instale a extensão _Portuguese (Brazil) Language Pack for Visual Studio Code_.
+// Out of Range should not throw an exception
+System.out.println(FellowshipOfTheRing.member(-1) == null);
+System.out.println(FellowshipOfTheRing.member(3) == null);
 
+// The relationship is bidirectional
+System.out.println(Aragorn.fellowship() == FellowshipOfTheRing);
+System.out.println(Aragorn.fellowship() != EvilFellowship);
+System.out.println(Aragorn.fellowship() == Gandalf.fellowship());
+System.out.println(Gimli.fellowship() == null);
 
+System.out.println(Aragorn.isMemberOfAFellowship() == true);
+System.out.println(Aragorn.isMemberOfTheFellowship(FellowshipOfTheRing) == true);
+System.out.println(Aragorn.isMemberOfTheFellowship(EvilFellowship) == false);
+System.out.println(Gimli.isMemberOfAFellowship() == false);
+System.out.println(Gimli.isMemberOfTheFellowship(FellowshipOfTheRing) == false);
+System.out.println(Gimli.isMemberOfTheFellowship(EvilFellowship) == false);
 
-## Instalação e Configuração do Git
+// However, a person can be member of only one fellowship
+EvilFellowship.signUp(Aragorn); // Aragorn has not been included
+System.out.println(EvilFellowship.count() == 0);
+System.out.println(EvilFellowship.hasNoMembers() == true);
+System.out.println(Aragorn.fellowship() == FellowshipOfTheRing);
+System.out.println(Aragorn.isMemberOfTheFellowship(FellowshipOfTheRing) == true);
+System.out.println(Aragorn.isMemberOfTheFellowship(EvilFellowship) == false);
 
-O Git para Windows pode ser obtido neste link: <https://git-scm.com/download/win>. A instalação é simples e intuitiva. Como sempre, não esqueça dos opcionais, principalmente a opção _adicionar o git ao path_!
+// There is another way to join the fellowships
+Gimli.join(FellowshipOfTheRing);
+Gimli.join(EvilFellowship); // has no effect (already in a fellowship)
+System.out.println(FellowshipOfTheRing.count() == 3);
+System.out.println(FellowshipOfTheRing.member(3).person().equals(Gimli));
 
-Para Linux, o comando `sudo apt install git` no terminal faz tudo.
+// Even indirect way
+Legolas.join(Gimli.fellowship());
+System.out.println(FellowshipOfTheRing.count() == 4);
+System.out.println(FellowshipOfTheRing.lastMember().person().equals(Legolas));
 
-Para verificar a instalação abra o _prompt_ ou um terminal e execute `git --version`. Se não acusou _"comando não encontrado"_ é porque está tudo funcionando perfeitamente.
+// More queries
+System.out.println(FellowshipOfTheRing.count("Human") == 1);
+System.out.println(FellowshipOfTheRing.count("Elf") == 1);
+System.out.println(FellowshipOfTheRing.count("Hobbit") == 0);
+System.out.println(FellowshipOfTheRing.has("Human") == true);
+System.out.println(FellowshipOfTheRing.has("Hobbit") == false);
 
+// Get the fellowship complete (adding various members at one time)
+System.out.println(FellowshipOfTheRing.count() == 4);
+FellowshipOfTheRing.signUp(Boromir, Frodo);
+FellowshipOfTheRing.signUp(Sam, Meriadoc, Peregrin);
+System.out.println(FellowshipOfTheRing.count() == 9);
+System.out.println(FellowshipOfTheRing.count("Hobbit") == 4);
 
+// Left the FellowshipOfTheRing
+System.out.println(FellowshipOfTheRing.count() == 9);
+System.out.println(FellowshipOfTheRing.count("Human") == 2);
+System.out.println(Boromir.fellowship() == FellowshipOfTheRing);
+System.out.println(FellowshipOfTheRing.member(5).person() == Boromir);
 
-## Códigos-fonte
+FellowshipOfTheRing.cancel(Boromir);
 
-Considere adicionar os arquivos de código-fonte `.java` no diretório [src](./src/), como o exemplo [src/App.java](./src/App.java).
+System.out.println(FellowshipOfTheRing.count() == 8);
+System.out.println(FellowshipOfTheRing.count("Human") == 1);
+System.out.println(Boromir.fellowship() == null);
+System.out.println(FellowshipOfTheRing.member(5).person() == Frodo);
 
+// Other way to unsubscribe
+Frodo.left(); // leave current fellowship if any
+System.out.println(FellowshipOfTheRing.count() == 7);
+System.out.println(Frodo.fellowship() == null);
 
+Gandalf.die();
+System.out.println(FellowshipOfTheRing.count() == 6);
+System.out.println(Gandalf.fellowship() == null);
 
-## Licenciamento
+// People can't join fellowships after die
+System.out.println(FellowshipOfTheRing.count() == 6);
+Gandalf.join(FellowshipOfTheRing);
+System.out.println(Gandalf.fellowship() == null);
+System.out.println(FellowshipOfTheRing.count() == 6);
 
-Este _template_ é _open source_ licenciado sob a GPL, assim como todos os projetos derivados dele. Mais detalhes em [LICENÇA.md](LICENÇA.md).
+// Asking if people are sharing a fellowship
+System.out.println(Meriadoc.isFellowOf(Peregrin) == true);
+System.out.println(Meriadoc.isFellowOf(Gandalf) == false);
+System.out.println(Meriadoc.isFellowOf(Boromir) == false);
+System.out.println(Meriadoc.isFellowOf(Meriadoc) == true);
+System.out.println(Gandalf.isFellowOf(Gandalf) == true);
+
+// Should be reflexive
+System.out.println(Meriadoc.isFellowOf(Peregrin) == Peregrin.isFellowOf(Meriadoc));
+System.out.println(Meriadoc.isFellowOf(Boromir) == Boromir.isFellowOf(Meriadoc));
+
+// Yet another way to join a fellowship
+System.out.println(Boromir.fellowship() == null);
+Boromir.fellow(Meriadoc);
+System.out.println(Boromir.fellowship() == Meriadoc.fellowship());
+System.out.println(Meriadoc.isFellowOf(Boromir) == true);
+Boromir.left();
+System.out.println(Boromir.fellowship() == null);
+Meriadoc.fellow(Boromir);
+System.out.println(Boromir.fellowship() == Meriadoc.fellowship());
+
+// Dissolve the fellowship :(
+FellowshipOfTheRing.dissolve();
+System.out.println(FellowshipOfTheRing.count() == 0);
+System.out.println(FellowshipOfTheRing.hasNoMembers() == true);
+System.out.println(FellowshipOfTheRing.member(1) == null);
+System.out.println(FellowshipOfTheRing.lastMember() == null);
+```
