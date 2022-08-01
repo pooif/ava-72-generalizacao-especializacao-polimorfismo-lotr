@@ -1,6 +1,6 @@
 # 7.2 // Generalização, Especialização e Polimorfismo // Lord of The Rings
 
-Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <>
+Use este link do GitHub Classroom para ter sua cópia alterável deste repositório: <https://classroom.github.com/a/L_ShwFek>
 
 Implementar respeitando os fundamentos de Orientação a Objetos.
 
